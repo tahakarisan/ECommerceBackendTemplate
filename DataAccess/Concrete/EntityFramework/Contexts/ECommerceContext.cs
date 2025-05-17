@@ -42,6 +42,10 @@ namespace DataAccess.Concrete.EntityFramework.Contexts
         public DbSet<Order> Orders { get; set; }
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<BasketItem> BasketItems { get; set; }
+        public DbSet<FavoriteItem> FavoriteItems { get; set; }
+        public DbSet<Favorite> Favorites { get; set; }
+
+
 
         #endregion
         public override int SaveChanges()

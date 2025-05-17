@@ -37,6 +37,7 @@ namespace Business
             serviceCollection.AddSingleton<IOrderService, OrderManager>();
             serviceCollection.AddSingleton<IBasketItemService, BasketItemManager>();
             serviceCollection.AddSingleton<IOrderItemService, OrderItemManager>();
+
             #endregion
             #endregion
             #region Infastructure

@@ -523,6 +523,60 @@ namespace DataAccess.Migrations
 
                     b.ToTable("BasketItems");
                 });
+            modelBuilder.Entity("Entities.Concrete.Shoppings.Favorite", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                b.Property<DateTime?>("CreatedDate")
+                    .HasColumnType("datetime2");
+
+                b.Property<DateTime?>("UpdatedDate")
+                    .HasColumnType("datetime2");
+
+                b.Property<int>("UserId")
+                    .HasColumnType("int");
+
+                b.HasKey("Id");
+
+                b.HasIndex("UserId");
+
+                b.ToTable("Favorites");
+            });
+            modelBuilder.Entity("Entities.Concrete.Shoppings.FavoriteItem", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                b.Property<int>("FavoriteId")
+                    .HasColumnType("int");
+
+                b.Property<DateTime?>("CreatedDate")
+                    .HasColumnType("datetime2");
+
+                b.Property<int>("ProductId")
+                    .HasColumnType("int");
+
+                b.Property<DateTime?>("UpdatedDate")
+                    .HasColumnType("datetime2");
+
+                b.Property<int>("UserId")
+                    .HasColumnType("int");
+
+                b.HasKey("Id");
+
+                b.HasIndex("FavoriteId");
+
+                b.HasIndex("ProductId");
+
+                b.ToTable("FavoriteItems");
+            });
 
             modelBuilder.Entity("Entities.Concrete.Shoppings.Order", b =>
                 {
@@ -614,7 +668,34 @@ namespace DataAccess.Migrations
 
                     b.Navigation("Product");
                 });
+            modelBuilder.Entity("Entities.Concrete.Shoppings.Favorite", b =>
+            {
+                b.HasOne("Core.Entities.Concrete.Auth.User", "User")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
+                b.Navigation("User");
+            });
+            modelBuilder.Entity("Entities.Concrete.Shoppings.FavoriteItem", b =>
+            {
+                b.HasOne("Entities.Concrete.Shoppings.Favorite", "Favorite")
+                    .WithMany("FavoriteItems")
+                    .HasForeignKey("FavoriteId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("Entities.Concrete.Product", "Product")
+                    .WithMany("FavoriteItems")
+                    .HasForeignKey("ProductId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("Favorite");
+
+                b.Navigation("Product");
+            });
             modelBuilder.Entity("Entities.Concrete.Shoppings.Order", b =>
                 {
                     b.HasOne("Entities.Concrete.AddressConcrete.Address", "Address")
@@ -654,11 +735,13 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Entities.Concrete.Product", b =>
                 {
                     b.Navigation("BasketItems");
+                    b.Navigation("FavoriteItems");
                 });
 
             modelBuilder.Entity("Entities.Concrete.Shoppings.Basket", b =>
                 {
                     b.Navigation("Items");
+                    
                 });
 #pragma warning restore 612, 618
         }

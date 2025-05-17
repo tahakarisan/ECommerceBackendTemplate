@@ -31,6 +31,9 @@ namespace DataAccess
             serviceCollection.AddSingleton<IOrderDal, EfOrderDal>();
             serviceCollection.AddSingleton<IBasketItemDal, EfBasketItemDal>();
             serviceCollection.AddSingleton<IOrderItemDal, EfOrderItemDal>();
+            serviceCollection.AddSingleton<IFavoriteDal, EfFavoriteDal>();
+            serviceCollection.AddSingleton<IFavoriteItemDal, EfFavoriteItemDal>();
+            
             #endregion
             serviceCollection.AddSingleton<IBrandDal, EfBrandDal>();
         }

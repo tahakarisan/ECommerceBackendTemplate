@@ -8,6 +8,7 @@ using Entities.DTOs.Categories.NotRelatedModels;
 using Entities.DTOs.Products;
 using Entities.DTOs.Products.NotRelatedModels;
 using Entities.DTOs.Shoppings;
+using Entities.DTOs.Shoppings.FavoriteModels;
 using Entities.DTOs.Shoppings.NotRelatedModels;
 
 namespace Business.Utilities
@@ -36,9 +37,12 @@ namespace Business.Utilities
             #region Shopping
             CreateMap<AddBasketDto, Basket>().ReverseMap();
             CreateMap<AddBasketItemDto, BasketItem>().ReverseMap();
+            CreateMap<AddFavoriteDto, Favorite>().ReverseMap();
+            CreateMap<AddFavoriteItemDto, FavoriteItem>().ReverseMap();
             CreateMap<AddOrderDto, Order>().ReverseMap();
             CreateMap<AddOrderItemDto, OrderItem>().ReverseMap();
             CreateMap<BasketItemNotRelated, BasketItem>().ReverseMap();
+
             #endregion
 
             CreateMap<AddAddressDto, Address>().ReverseMap();

@@ -37,6 +37,7 @@ namespace Business.Concrete.Auths
                 LastName = userForRegisterDto.LastName,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
+                CreatedDate = DateTime.Now,
                 Status = true
             };
             IResult result = await _userService.AddAsync(user);
@@ -75,6 +76,7 @@ namespace Business.Concrete.Auths
                 Email = userForUpdate.Email,
                 FirstName = userForUpdate.FirstName,
                 LastName = userForUpdate.LastName,
+                UpdatedDate = DateTime.Now,
             };
 
             IResult result = await _userService.UpdateAsync(user);

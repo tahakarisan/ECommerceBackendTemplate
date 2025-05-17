@@ -1,10 +1,17 @@
 ﻿using Castle.DynamicProxy;
-using Core.CrossCuttingConcerns.Validation;
+using Core.Utilities.Interceptors;
+using CoreLayer.CrossCuttingConcerns.Validation;
 using Core.Utilities.Interceptors;
 using FluentValidation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Core.Aspects.Autofac.Validation
+namespace CoreLayer.Aspects.Autofac
 {
+
     public class ValidationAspect : MethodInterception
     {
         private Type _validatorType;
@@ -12,21 +19,20 @@ namespace Core.Aspects.Autofac.Validation
         {
             if (!typeof(IValidator).IsAssignableFrom(validatorType))
             {
-                //throw new System.Exception(AspectMessages.WrongValidationType);
-                throw new System.Exception("");
+                throw new System.Exception("Bu sınıf doğrulama sınıflarıyla uyuşmuyor");
             }
-
             _validatorType = validatorType;
         }
         protected override void OnBefore(IInvocation invocation)
         {
-            IValidator<object>? validator = (IValidator<object>)Activator.CreateInstance(_validatorType);
-            Type entityType = _validatorType.BaseType.GetGenericArguments()[0];
-            IEnumerable<object> entities = invocation.Arguments.Where(t => t.GetType() == entityType);
-            foreach (object? entity in entities)
+            var validator = (IValidator)Activator.CreateInstance(_validatorType);
+            var entityType = _validatorType.BaseType.GetGenericArguments()[0];
+            var entities = invocation.Arguments.Where(t => t.GetType() == entityType);
+            foreach (var entity in entities)
             {
-                ValidationTool.Validate<object>(validator, entity);
+                ValidationTool.Validate(validator, entity);
             }
         }
     }
+
 }

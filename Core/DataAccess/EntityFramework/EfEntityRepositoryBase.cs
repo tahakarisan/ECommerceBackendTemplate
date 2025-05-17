@@ -40,16 +40,28 @@ namespace Core.DataAccess.EntityFramework
                 return datas.ToClearCircularList();
             }
         }
-        public virtual List<TEntity> GetAllWithInclude(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include, Expression<Func<TEntity, bool>>? filter = null)
+        public virtual List<TEntity> GetAllWithInclude(
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include,
+        Expression<Func<TEntity, bool>>? filter = null)
         {
             using (TContext context = new TContext())
             {
                 IQueryable<TEntity> queryable = context.Set<TEntity>().AsQueryable();
-                queryable = include(queryable);
-                return filter == null ? context.Set<TEntity>().ToList()
-                    : context.Set<TEntity>().Where(filter).ToList();
+
+                if (filter != null)
+                {
+                    queryable = queryable.Where(filter);
+                }
+
+                if (include != null)
+                {
+                    queryable = include(queryable);
+                }
+
+                return queryable.ToList();
             }
         }
+
 
         public IPaginate<TEntity> GetList(Expression<Func<TEntity, bool>>? predicate = null,
                                      Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,

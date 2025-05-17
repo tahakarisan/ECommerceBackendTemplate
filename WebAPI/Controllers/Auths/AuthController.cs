@@ -1,4 +1,5 @@
 ﻿using Business.Abstract.Auths;
+using Core.Utilities.Results;
 using Entities.DTOs.Users;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,15 +39,14 @@ namespace WebAPI.Controllers.Auths
             Core.Utilities.Results.IResult userExists = await _authService.IsExistAsync(userForRegisterDto.Email);
             if (!userExists.Success)
             {
-                return BadRequest(userExists.Message);
+                Core.Utilities.Results.IDataResult<Core.Entities.Concrete.Auth.User> registerResult = await _authService.RegisterAsync(userForRegisterDto, userForRegisterDto.Password);
+                Core.Utilities.Results.IDataResult<Core.Utilities.Security.JWT.AccessToken> result = await _authService.CreateAccessTokenAsync(registerResult.Data);
+                if (result.Success)
+                {
+                    return Ok(result.Data);
+                }
             }
-            Core.Utilities.Results.IDataResult<Core.Entities.Concrete.Auth.User> registerResult = await _authService.RegisterAsync(userForRegisterDto, userForRegisterDto.Password);
-            Core.Utilities.Results.IDataResult<Core.Utilities.Security.JWT.AccessToken> result = await _authService.CreateAccessTokenAsync(registerResult.Data);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return BadRequest(result.Message);
+            return BadRequest(userExists.Message);
         }
 
         [HttpPut("update")]

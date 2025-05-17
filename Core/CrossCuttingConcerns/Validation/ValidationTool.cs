@@ -1,16 +1,18 @@
 ﻿using FluentValidation;
-
-namespace Core.CrossCuttingConcerns.Validation
+using FluentValidation.Results;
+namespace CoreLayer.CrossCuttingConcerns.Validation
 {
     public static class ValidationTool
     {
-        public static void Validate<T>(IValidator<T> validator, T entity)
+        public static void Validate(IValidator validator, object entity)
         {
-            FluentValidation.Results.ValidationResult result = validator.Validate(entity);
+            ValidationContext<object> context = new ValidationContext<object>(entity);
+            ValidationResult result = validator.Validate(context);
             if (!result.IsValid)
             {
                 throw new ValidationException(result.Errors);
             }
         }
+        //scss
     }
-}
+}//Validation

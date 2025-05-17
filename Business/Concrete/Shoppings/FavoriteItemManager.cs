@@ -52,8 +52,8 @@ namespace Business.Concrete.Shoppings
         {
             List<FavoriteItem> result = await _favoriteItemDal.GetAllWithIncludeAsync(
                include:
-                   i => i.Include(b => b.Favorite),
-               filter: p => p.UserId == userId);
+                 i => i.Include(b => b.Product).Include(b => b.Favorite),
+                 filter: p => p.UserId == userId);
             return result != null ? new SuccessDataResult<List<FavoriteItem>>(result, Messages.Listed) : new ErrorDataResult<List<FavoriteItem>>(Messages.NotListed);
         }
         #endregion
